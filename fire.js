@@ -7,7 +7,7 @@ function start() {
     createFireSource()
     renderFire()
 
-    setInterval(calculeteFirePropagation, 1000)
+    setInterval(calculateFirePropagation, 1000)
 }
 
 function createFireDataStructure() {
@@ -19,14 +19,30 @@ function createFireDataStructure() {
 
 }
 
-function calculeteFirePropagation() {
+function calculateFirePropagation() {
     for (let column = 0; column < fireWidth; column++) {
         for (let row = 0; row < fireHeight; row++) {
             const pixelIndex = column + (fireWidth * row)
 
-            console.log(pixelIndex)
+            updateFireIntensityPerPixel(pixelIndex)
         }
     }
+    renderFire()
+}
+
+function updateFireIntensityPerPixel(currentPixelIndex) {
+    const belowPixelIndex = currentPixelIndex + fireWidth
+
+
+    if (belowPixelIndex >= fireWidth * fireWidth) {
+        return
+    }
+    const decay = 1
+    const belowPixeFireIntensity = firePixelsArray[belowPixelIndex]
+    const newFireIntensity =
+        belowPixeFireIntensity - decay >= 0 ? belowPixeFireIntensity - decay : 0
+
+    firePixelsArray[currentPixelIndex] = newFireIntensity
 }
 
 function renderFire() {
